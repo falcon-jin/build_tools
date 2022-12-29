@@ -35,6 +35,7 @@ def make():
   base.replaceInFileRE(server_build_dir + "/Common/sources/commondefines.js", "const buildNumber = [0-9]*", "const buildNumber = " + build_number)
   base.replaceInFileRE(server_build_dir + "/Common/sources/license.js", "const buildDate = '[0-9-/]*'", "const buildDate = '" + cur_date + "'")
   base.replaceInFileRE(server_build_dir + "/Common/sources/commondefines.js", "const buildVersion = '[0-9.]*'", "const buildVersion = '" + product_version + "'")
+  base.replaceInFileRE(server_build_dir + "/Common/sources/constants.js", "exports.LICENSE_CONNECTIONS = '[0-9.]*'", "exports.LICENSE_CONNECTIONS = 200")
 
   custom_public_key = branding_dir + '/debug.js'
 
