@@ -6,20 +6,25 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #配置代理 不需要可以移除
 ENV http_proxy http://127.0.0.1:7890
 ENV https_proxy http://127.0.0.1:7890
+ENV all_proxy=socks5://127.0.0.1:7890
 
 RUN apt-get -y update && \
-    apt-get -y install python \
+    apt-get -y install python git \
                        python3 \
                        sudo
 RUN rm /usr/bin/python && ln -s /usr/bin/python2 /usr/bin/python
 ADD . /build_tools
+
+#RUN cd /build_tools/../../ && rm -rf server web-apps git clone https://github.com/ONLYOFFICE/web-apps.git  && git clone https://github.com/ONLYOFFICE/server.git
+RUN git config --global http.proxy 'socks5://127.0.0.1:7890' && \
+    git config --global https.proxy 'socks5://127.0.0.1:7890'
 WORKDIR /build_tools
 
 RUN cd tools/linux && \
     python3 ./automate.py server
 
 #移除代理
-RUN unset http_proxy && unset https_proxy
+RUN unset http_proxy && unset https_proxy && unset all_proxy
 
 FROM onlyoffice/documentserver:latest
 LABEL maintainer="falcon2014@163.com"
